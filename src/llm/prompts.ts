@@ -146,7 +146,7 @@ function whatToSay(input: DraftInput): string {
     case "need_info":
       return "We need more information before the claim can be processed. Nothing is approved or rejected yet.";
     case "escalate":
-      return "The claim has been forwarded to the Claims Manager for approval. No amount and no promise of payment or of any outcome.";
+      return "The claim has been forwarded to the Claims Manager for review. No amount and no promise of payment or of any outcome.";
     case "duplicate":
       return "This is a duplicate: a claim on this shipment was already decided, so no new claim is opened. No amount.";
     case "not_a_claim":

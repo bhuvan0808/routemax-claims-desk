@@ -27,7 +27,8 @@ export function findInrAmounts(text: string): number[] {
   const num = String.raw`(\d[\d,]*(?:\.\d+)?)`;
   const unit = String.raw`(?:\s*(lakhs?|lacs?|k|crores?)\b)?`;
   const patterns = [
-    new RegExp(String.raw`(?:rs\.?|inr|₹|rupees?)\s*` + num + unit, "gi"),
+    // (?<![a-z]) so words that merely END in "rs" ("customers 3", "cartons 12") are not read as money.
+    new RegExp(String.raw`(?:(?<![a-z])(?:rs\.?|inr|rupees?)|₹)\s*` + num + unit, "gi"),
     new RegExp(num + unit + String.raw`\s*(?:rupees?|inr\b|/-)`, "gi"),
   ];
   const seen = new Set<string>();

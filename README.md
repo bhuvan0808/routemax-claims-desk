@@ -81,14 +81,26 @@ Secrets live in `.env` (gitignored). Copy `.env.example`. The Groq key is read f
 `LLM_MODE=mock` (default) is a deterministic heuristic extractor plus template replies, so the
 whole pipeline and every eval run offline. `LLM_MODE=groq` calls Groq's OpenAI-compatible API
 at temperature 0 with JSON-schema structured output. The model name is `groqModel` in
-[src/config.ts](src/config.ts) (override with `GROQ_MODEL`): __GROQ_MODEL_NOTE__
+[src/config.ts](src/config.ts) (override with `GROQ_MODEL`), currently `openai/gpt-oss-120b`.
+Groq's structured-outputs and models pages, as read during the build on 2026-11-19, list two
+Production models that support strict `json_schema` output: `openai/gpt-oss-120b` and
+`openai/gpt-oss-20b`. The larger one was chosen for Hinglish and multi-claim emails. If Groq
+answers 400 to a `json_schema` request the client falls back to `json_object` for that call.
+
+> **Live mode is not yet verified.** The `GROQ_API_KEY` supplied during the build was rejected
+> by Groq (HTTP 401, invalid API key), so no live call has succeeded. The Groq client is covered
+> by 20 tests against a fake server. Until a valid key is set, the deployed Worker runs in mock
+> mode and says so in `/health`. With a valid key in `.env`: `npm run eval -- --mode groq`.
+
+Local `wrangler dev` reads `.env` when there is no `.dev.vars`, and `wrangler.jsonc` asks for
+`LLM_MODE=groq`. Copy `.dev.vars.example` to `.dev.vars` for offline local development.
 
 ### API (same Worker serves the UI at `/`)
 
 | Method | Path | |
 |---|---|---|
 | POST | `/claims` | One email. JSON `{ "email": "...", "claim_id": "C01" }` or `text/plain`. Returns rows, rules fired, trace, draft |
-| POST | `/claims/batch` | `{ "emails": [{ "email": "...", "claim_id": "..." }] }`, processed in order |
+| POST | `/claims/batch` | `{ "emails": [{ "email": "...", "claim_id": "..." }] }`, processed in order. In live mode keep batches small (the UI sends 4 at a time): each email costs several subrequests and the Workers free plan caps them per request |
 | GET | `/claims` | Everything processed so far |
 | GET | `/results.csv` | The review sheet |
 | GET | `/audit?limit=50` | Audit log: inputs, rules fired, config snapshot per decision |
@@ -166,9 +178,25 @@ fired, config, model, git sha) and a `.summary.md`. Runs are never overwritten a
 | D | Risk cases for an agent that can approve money: prompt injection, cap and limit boundaries, day 7/8 and 15/16, unknown and wrong-customer ids, every lookup fail mode, idempotency, duplicates, fake photo claims, PDF-only, multi-claim emails, non-claims, abusive and urgent tone, Hinglish, missing amount, reply checks |
 | E | Suite A again on the live LLM |
 
-__EVAL_SUMMARY__
+Latest result (newest file in [eval_runs/](eval_runs)): **113 of 113 cases pass in mock mode.**
 
-The first run's worst failure and its fix are in [FIX_LOG.md](FIX_LOG.md).
+| Suite | Cases | Passed | Notes |
+|---|---|---|---|
+| A golden set | 16 | 16 | 15 emails, 16 rows, plus the row-count check |
+| B config variants | 32 | 32 | Whole golden set re-run under each variant, so "nothing else changed" is asserted too |
+| C October regression | 27 | 27 | Engine agrees with the humans on 20 of 26 (76.9%). 6 known deviations, 0 unexpected |
+| D risk cases | 38 | 38 | 29 from the first pass plus 9 added after it |
+| E live LLM | not run | - | Groq rejected the supplied key. Reported as not run, not as passed |
+
+The 6 known deviations in Suite C are the team doing something the SOP does not say: 5 small
+damage claims approved without photos, and 1 late claim approved because sales asked. They are
+listed with reasons in each run's summary. A new disagreement, or a listed one that starts
+agreeing, fails the suite, so the list cannot go stale.
+
+Unit tests: `npm test`, 299 tests.
+
+One earlier run failed on a case that would have paid Rs 18,000 to a spoofed sender. That
+failure, the fix and the new test are in [FIX_LOG.md](FIX_LOG.md). Both runs are kept.
 
 ## Deploy
 

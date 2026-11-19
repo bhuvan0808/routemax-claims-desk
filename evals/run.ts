@@ -908,6 +908,23 @@ function parseArgs(argv: string[]): { mode?: "mock" | "groq" | "both"; suites: S
   return { mode, suites };
 }
 
+/**
+ * Asks Groq whether it accepts the key (GET /models: no tokens used, nothing about the claims is sent).
+ * Returns a short reason if the key is rejected (401/403), "" if accepted or if Groq is unreachable
+ * (an outage must not hide Suite E: in that case it runs and fails honestly).
+ */
+async function groqKeyRejected(key: string): Promise<string> {
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/models", {
+      headers: { authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(10000),
+    });
+    return res.status === 401 || res.status === 403 ? `HTTP ${res.status} invalid API key` : "";
+  } catch {
+    return "";
+  }
+}
+
 async function main(): Promise<void> {
   process.chdir(ROOT); // createLocalDeps reads ./data
   const args = parseArgs(process.argv.slice(2));
@@ -937,6 +954,14 @@ async function main(): Promise<void> {
   if (!args.suites.has("E")) skipE = "not selected (--suite)";
   else if (args.mode === "mock") skipE = "--mode mock";
   else if (!hasKey) skipE = "GROQ_API_KEY is not set (add it to .env to run the golden set against the real model)";
+  else if (args.mode === undefined) {
+    // Default run only: a key that Groq itself rejects is a credentials problem, not a product
+    // result, so Suite E is reported as NOT RUN (loudly) instead of 16 identical failures.
+    // `--mode groq` / `--mode both` skip this preflight and always run Suite E for real.
+    const rejected = await groqKeyRejected((process.env.GROQ_API_KEY ?? "").trim());
+    if (rejected)
+      skipE = `GROQ_API_KEY was REJECTED by Groq (${rejected}) - live-LLM mode is UNVERIFIED. Fix the key in .env and re-run, or force it with --mode groq`;
+  }
 
   if (runMock) {
     const suites: SuiteResult[] = [];

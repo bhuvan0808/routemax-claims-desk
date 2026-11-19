@@ -54,8 +54,8 @@ Things it caught today that are easy to miss by hand:
 - It **never pays more** than the lower of what was claimed and the declared value. That is checked twice, by two separate pieces of code.
 - **Same email twice** returns the first answer and creates no new row. A new email about an already-decided shipment is a duplicate.
 - **Every decision is logged** with its inputs, the rules that fired, and the policy settings at the time.
-- There is a test suite (`npm run eval`) of __EVAL_CASES__ cases built around "what could make this pay wrongly". Every run is saved in `eval_runs/`, including the ones that failed. __EVAL_RESULT__
-- The first run found a real problem and it is written up, with the fix, in [FIX_LOG.md](FIX_LOG.md).
+- There is a test suite (`npm run eval`) of 113 cases built around "what could make this pay wrongly". Every run is saved in `eval_runs/`, including the ones that failed. All 113 pass today.
+- It found a real problem. An email whose *display name* was Apex Pharma's address, but which actually came from a stranger asking for payment to new bank details, was approved for Rs 18,000. That is fixed, with a test that fails on the old code. The write-up is in [FIX_LOG.md](FIX_LOG.md).
 
 I also replayed all 26 of October's decisions through the rules. It agrees with your team on 20.
 The 6 it disagrees on are the interesting part: 5 are small damage claims approved without
@@ -74,6 +74,11 @@ have left each one on the cautious side. Details and evidence in [ASSUMPTIONS.md
 5. **The Rs 50,000 limit** is applied to the payable amount after the cap, not the amount claimed.
 6. **Concealed damage on a clean POD** (C07) is rejected, as the SOP says. Is that what you want when there are photos?
 7. **C08**: the sheet says paid, the customer says not received. Someone should check with finance.
+
+Two things I could not verify, as opposed to things for you to decide:
+
+- **The live AI model has not run successfully.** The Groq key I was given was rejected. Everything above was produced in the built-in offline mode, which reads today's 15 emails correctly but is a simple pattern-matcher, not what should face real customers' messier emails. The live path is written and tested against a stand-in, and it fails safe (when the key was rejected, every claim was escalated and nothing was approved). It needs a working key and one more eval run before it is trusted.
+- **Who is really sending the email.** The tool matches the sender's address to the customer's name. That is a reasonable guess, not proof, and a forged address would need checking at the mail server.
 
 ## 5. What I would do next
 

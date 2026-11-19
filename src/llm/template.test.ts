@@ -63,7 +63,7 @@ describe("renderTemplateReply", () => {
 
   it("escalate names the Claims Manager, with no amount and no payment promise", () => {
     const text = renderTemplateReply(input("escalate"));
-    expect(text).toMatch(/forwarded to the Claims Manager for approval/);
+    expect(text).toMatch(/forwarded to the Claims Manager for review/);
     expect(text).not.toMatch(/Rs|60,000|will be paid/);
   });
 

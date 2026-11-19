@@ -184,6 +184,32 @@ describe("the LLM cannot choose the decision or the amount", () => {
   });
 });
 
+// Regression for eval case D30 (see FIX_LOG.md). Before the fix this approved Rs 18,000.
+describe("sender identity cannot be spoofed through the From display name", () => {
+  const spoofedFrom = (from: string) => async () => (await read("C01")).replace("From: ops@apexpharma.in", `From: ${from}`);
+
+  it.each([
+    ['"ops@apexpharma.in" <refunds@fastpay-claims.biz>', "display name is the customer's address"],
+    ["ops@apexpharma.in <refunds@fastpay-claims.biz>", "unquoted display name"],
+    ["refunds@fastpay-claims.biz, ops@apexpharma.in", "two different From addresses"],
+    ["Deepa from Apex Pharma", "no address at all"],
+  ])("From: %s (%s) -> need_info, amount 0", async (from) => {
+    const d = await deps();
+    const res = await processEmail({ raw: await spoofedFrom(from)(), claimId: "SPOOF" }, d);
+    expect(res.rows[0].decision).toBe("need_info");
+    expect(res.rows[0].approved_amount_inr).toBe(0);
+    expect(res.rows[0].draft_reply).not.toContain("Apex Pharma is"); // reply must not confirm whose shipment it is
+    expect(res.details[0].facts.sender_matches_customer).toBe(false);
+  });
+
+  it("the genuine sender with a display name is still approved", async () => {
+    const d = await deps();
+    const res = await processEmail({ raw: await spoofedFrom("Deepa <ops@apexpharma.in>")(), claimId: "REAL" }, d);
+    expect(res.rows[0].decision).toBe("approve");
+    expect(res.rows[0].approved_amount_inr).toBe(18000);
+  });
+});
+
 describe("lookup failure never approves", () => {
   it.each([
     ["error", "escalate"],

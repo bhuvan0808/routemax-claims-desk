@@ -92,7 +92,7 @@ function renderEnglish(input: DraftInput): string[] {
       break;
     case "escalate":
       lines.push(
-        `Decision: your ${kind} has been forwarded to the Claims Manager for approval. ` +
+        `Decision: your ${kind} has been forwarded to the Claims Manager for review. ` +
           "No final decision has been made yet, and we will update you once that is complete.",
       );
       break;
@@ -151,7 +151,7 @@ function renderHinglish(input: DraftInput): string[] {
       break;
     case "escalate":
       lines.push(
-        `Decision: aapka ${kind} approval ke liye Claims Manager ko forward kar diya gaya hai. ` +
+        `Decision: aapka ${kind} review ke liye Claims Manager ko forward kar diya gaya hai. ` +
           "Abhi final decision nahi hua hai; decision hone par hum aapko update karenge.",
       );
       break;

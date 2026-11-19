@@ -6,6 +6,7 @@ import {
   isImageFile,
   parseEmail,
   parseHeaderDate,
+  parseSender,
 } from "./email";
 import { findInrAmounts, formatInr } from "./format";
 import { groundAmount, groundShipmentId } from "./grounding";
@@ -30,6 +31,26 @@ describe("email parsing", () => {
     expect(e.attachments).toEqual(["pallet1.jpg", "pallet2.jpg", "damage_report.pdf"]);
     expect(e.image_attachments).toEqual(["pallet1.jpg", "pallet2.jpg"]);
     expect(e.body.startsWith("Dear team,")).toBe(true);
+  });
+
+  // Regression for eval case D30 (see FIX_LOG.md): the display name is attacker-controlled text.
+  it("takes the sender from the angle-bracket address, never from the display name", () => {
+    const spoof = parseEmail('From: "ops@apexpharma.in" <refunds@fastpay-claims.biz>\nDate: 2026-11-10\n\nhi');
+    expect(spoof.sender_email).toBe("refunds@fastpay-claims.biz");
+    expect(spoof.sender_domain).toBe("fastpay-claims.biz");
+    expect(parseSender("ops@apexpharma.in <refunds@fastpay-claims.biz>").sender_domain).toBe("fastpay-claims.biz");
+    expect(parseSender('"Apex Pharma (ops@apexpharma.in)" <x@evil.biz>').sender_email).toBe("x@evil.biz");
+    // legitimate shapes still work
+    expect(parseSender("ops@apexpharma.in").sender_email).toBe("ops@apexpharma.in");
+    expect(parseSender("Deepa <Ops@ApexPharma.in>").sender_email).toBe("ops@apexpharma.in");
+    expect(parseSender("ops@apexpharma.in (Deepa)").sender_email).toBe("ops@apexpharma.in");
+    expect(parseSender('"Deepa, Apex Pharma" <ops@apexpharma.in>').sender_domain).toBe("apexpharma.in");
+    // no address, or more than one different address: sender cannot be established
+    expect(parseSender("")).toEqual({ sender_email: "", sender_domain: "" });
+    expect(parseSender("Deepa from Apex Pharma")).toEqual({ sender_email: "", sender_domain: "" });
+    expect(parseSender("x@evil.biz, ops@apexpharma.in")).toEqual({ sender_email: "", sender_domain: "" });
+    expect(parseSender("<x@evil.biz> <ops@apexpharma.in>")).toEqual({ sender_email: "", sender_domain: "" });
+    expect(parseSender('"ops@apexpharma.in"')).toEqual({ sender_email: "", sender_domain: "" });
   });
 
   it("treats 'Attachments: none' as no attachments and a PDF as not a photo", () => {
@@ -101,6 +122,8 @@ describe("money + grounding", () => {
       expect.arrayContaining([18000, 4500, 7500, 2000]),
     );
     expect(findInrAmounts("filed 11 days after delivery, window 7 days")).toEqual([]);
+    expect(findInrAmounts("customers 3, cartons 12, drivers 4500")).toEqual([]); // words ending in "rs" are not money
+    expect(findInrAmounts("Total Rs.4500 / rs 12,000 / Rupees 300")).toEqual([4500, 12000, 300]);
   });
 
   it("drops an extracted amount that is not written in the email", () => {

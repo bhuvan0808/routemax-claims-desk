@@ -75,6 +75,34 @@ export function parseAttachments(value: string): string[] {
     .filter((s) => s.length > 0 && !/^(none|nil|n\/a)$/i.test(s));
 }
 
+/**
+ * The address that actually sent the mail, from a From header.
+ *
+ * The display name is free text the sender types, so it proves nothing:
+ *   From: "ops@apexpharma.in" <refunds@fastpay-claims.biz>
+ * is mail from fastpay-claims.biz. Rules:
+ *   - if there are angle brackets, ONLY addresses inside them count (RFC 5322 addr-spec);
+ *   - otherwise quoted strings and (comments) are stripped before looking for an address;
+ *   - exactly one distinct address must remain. None, or several different ones, means the
+ *     sender cannot be established: return "" so no customer can ever match (-> need_info).
+ */
+export function parseSender(from: string): { sender_email: string; sender_domain: string } {
+  const unknown = { sender_email: "", sender_domain: "" };
+  const ADDRESS = /([A-Za-z0-9._%+-]+)@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,})/g;
+  const angled = [...from.matchAll(/<([^<>]*)>/g)].map((m) => m[1]);
+  const searchIn =
+    angled.length > 0
+      ? angled.join(" ")
+      : from.replace(/"(?:[^"\\]|\\.)*"/g, " ").replace(/\([^()]*\)/g, " ");
+  const found = [...searchIn.matchAll(ADDRESS)].map((m) => ({
+    email: `${m[1]}@${m[2]}`.toLowerCase(),
+    domain: m[2].toLowerCase(),
+  }));
+  const distinct = new Set(found.map((f) => f.email));
+  if (distinct.size !== 1) return unknown;
+  return { sender_email: found[0].email, sender_domain: found[0].domain };
+}
+
 export function parseEmail(raw: string): ParsedEmail {
   const text = raw.replace(/^﻿/, "").replace(/\r\n?/g, "\n");
   const lines = text.split("\n");
@@ -96,9 +124,7 @@ export function parseEmail(raw: string): ParsedEmail {
   const body = lines.slice(i).join("\n").trim();
 
   const from = headers["from"] ?? "";
-  const addr = /([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/.exec(from);
-  const sender_email = addr ? `${addr[1]}@${addr[2]}`.toLowerCase() : "";
-  const sender_domain = addr ? addr[2].toLowerCase() : "";
+  const { sender_email, sender_domain } = parseSender(from);
   const date_raw = headers["date"] ?? "";
   const attachments = parseAttachments(headers["attachments"] ?? "");
 
