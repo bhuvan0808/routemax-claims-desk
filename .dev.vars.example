@@ -1,0 +1,6 @@
+# Copy to .dev.vars for `wrangler dev`. .dev.vars is gitignored.
+# In production set the key with:  wrangler secret put GROQ_API_KEY
+GROQ_API_KEY=
+LLM_MODE=mock
+LOOKUP_FAIL_MODE=none
+ALLOW_FAULT_INJECTION=1

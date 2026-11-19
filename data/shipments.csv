@@ -1,0 +1,17 @@
+shipment_id,customer,delivered_date,pieces_shipped,declared_value_inr,pod_status,pod_remarks
+SHP-1001,Apex Pharma,2026-11-07,30,60000,Signed with remarks,1 box crushed
+SHP-1002,Bluewave Electronics,2026-10-30,20,85000,Signed with remarks,2 cartons dented
+SHP-1003,Zenith Retail,2026-10-29,40,48000,Signed with remarks,37 pieces received
+SHP-1004,Kirana Mart,2026-11-08,15,18000,Signed with remarks,outer carton damaged
+SHP-1005,Nova Textiles,2026-11-06,22,40000,Signed with remarks,2 rolls stained
+SHP-1006,Orbit Auto Parts,2026-11-05,18,72000,Signed with remarks,cartons wet
+SHP-1007,Sunrise Foods,2026-11-04,50,35000,Signed - received in good condition,
+SHP-1009,Desi Bazaar,2026-11-08,25,30000,Signed with remarks,20 received
+SHP-1010,Metro Hardware,2026-11-07,10,25000,Signed with remarks,1 carton dented
+SHP-1011,Bluewave Electronics,2026-11-09,12,90000,Signed - received in good condition,12 pieces received
+SHP-1012,Nova Textiles,2026-11-02,8,12000,Signed with remarks,1 roll torn
+SHP-1013,Zenith Retail,2026-11-06,60,120000,Signed with remarks,pallet broken
+SHP-1014,Orbit Auto Parts,2026-11-07,14,40000,Signed with remarks,scratches on 2 units
+SHP-1015,Orbit Auto Parts,2026-11-08,9,22000,Signed with remarks,box corner crushed
+SHP-1016,Sunrise Foods,2026-11-09,40,28000,Signed - received in good condition,
+SHP-0987,Apex Pharma,2026-10-08,20,30000,Signed with remarks,1 carton torn

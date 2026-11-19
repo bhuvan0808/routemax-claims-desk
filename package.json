@@ -1,0 +1,30 @@
+{
+  "name": "routemax-claims-desk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "RouteMax Claims Desk Agent: extract (LLM) -> decide (deterministic rules) -> draft (LLM) for damage/shortage claim emails.",
+  "scripts": {
+    "claims": "tsx src/cli/claims.ts",
+    "claims:groq": "tsx src/cli/claims.ts --mode groq",
+    "eval": "tsx evals/run.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "smoke": "node scripts/smoke.mjs",
+    "ship": "node scripts/ship.mjs"
+  },
+  "dependencies": {
+    "hono": "^4.6.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261118.1",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0",
+    "wrangler": "^4.0.0"
+  }
+}

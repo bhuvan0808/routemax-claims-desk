@@ -1,0 +1,27 @@
+claim_id,shipment_id,customer,claim_type,filed_date,delivered_date,claim_amount_inr,photo_attached,decision,approved_amount_inr,decided_by,notes
+C-0901,SHP-0950,Kirana Mart,damage,2026-10-02,2026-09-30,2400,no,approved,2400,Rahul,small claim - goodwill
+C-0902,SHP-0951,Bluewave Electronics,damage,2026-10-02,2026-09-28,15000,yes,approved,15000,Anita,
+C-0903,SHP-0952,Nova Textiles,damage,2026-10-03,2026-09-24,8000,yes,rejected,0,Rahul,filed after 7 days
+C-0904,SHP-0953,Zenith Retail,shortage,2026-10-04,2026-09-22,6000,no,approved,6000,Anita,key account - 15 day window
+C-0905,SHP-0954,Sunrise Foods,damage,2026-10-05,2026-10-03,9000,yes,rejected,0,Sameer,"POD clean, no remarks"
+C-0906,SHP-0955,Desi Bazaar,damage,2026-10-06,2026-10-04,3100,no,approved,3100,Sameer,"small one, approved"
+C-0907,SHP-0956,Orbit Auto Parts,damage,2026-10-06,2026-10-02,88000,yes,escalated,64000,Meera,capped at declared value; manager approved
+C-0908,SHP-0957,Metro Hardware,damage,2026-10-07,2026-10-05,12500,no,need_info,0,Anita,asked for photos
+C-0909,SHP-0958,Apex Pharma,damage,2026-10-08,2026-10-06,4800,no,approved,4800,Rahul,goodwill
+C-0910,SHP-0959,Bluewave Electronics,damage,2026-10-09,2026-09-30,11000,yes,approved,11000,Sameer,exception - sales asked
+C-0911,SHP-0960,Zenith Retail,damage,2026-10-10,2026-09-27,14000,yes,approved,14000,Anita,key account window
+C-0912,SHP-0961,Nova Textiles,shortage,2026-10-11,2026-10-09,5000,no,rejected,0,Rahul,POD shows full count
+C-0913,SHP-0962,Kirana Mart,damage,2026-10-12,2026-10-11,1900,no,approved,1900,Sameer,
+C-0914,SHP-0963,Zenith Retail,damage,2026-10-13,2026-09-26,7000,yes,rejected,0,Anita,17 days - outside 15 day window
+C-0915,SHP-0964,Sunrise Foods,damage,2026-10-14,2026-10-12,65000,yes,escalated,65000,Meera,manager approved
+C-0916,SHP-0965,Desi Bazaar,shortage,2026-10-15,2026-10-13,4500,no,approved,4500,Rahul,POD: 3 short
+C-0917,SHP-0966,Orbit Auto Parts,damage,2026-10-16,2026-10-07,9000,yes,rejected,0,Sameer,late
+C-0918,SHP-0967,Metro Hardware,damage,2026-10-17,2026-10-15,3800,no,approved,3800,Anita,under 5k
+C-0919,SHP-0968,Apex Pharma,damage,2026-10-18,2026-10-16,21000,no,need_info,0,Rahul,photos requested
+C-0920,SHP-0969,Nova Textiles,damage,2026-10-19,2026-10-17,4200,no,need_info,0,Sameer,asked for photos
+C-0921,SHP-0970,Bluewave Electronics,damage,2026-10-20,2026-10-18,52000,yes,escalated,52000,Meera,manager approved
+C-0922,SHP-0971,Kirana Mart,damage,2026-10-21,2026-10-12,2000,no,rejected,0,Anita,late - 9 days
+C-0931,SHP-0987,Apex Pharma,damage,2026-10-10,2026-10-08,6500,yes,approved,6500,Rahul,"paid 2026-10-20, ref PAY-7781"
+C-0932,SHP-0972,Sunrise Foods,shortage,2026-10-22,2026-10-21,7000,no,approved,7000,Sameer,POD: 5 short
+C-0933,SHP-0973,Zenith Retail,damage,2026-10-23,2026-10-11,18000,yes,approved,18000,Anita,key account - 15 day window
+C-0934,SHP-0974,Orbit Auto Parts,damage,2026-10-24,2026-10-22,30000,yes,approved,26000,Rahul,capped at declared value
