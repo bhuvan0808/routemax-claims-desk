@@ -1,0 +1,1031 @@
+{
+  "run_id": "2026-11-19T10-11-08Z-mock",
+  "timestamp": "2026-11-19T10-11-08Z",
+  "mode": "mock",
+  "model": "unknown",
+  "git_sha": "9467ea7",
+  "git_dirty": true,
+  "node": "v24.16.0",
+  "config": {
+    "defaultWindowDays": 7,
+    "keyAccountWindows": {
+      "Zenith Retail": 15
+    },
+    "smallClaimPhotoWaiverInr": 0,
+    "shortageProRata": false,
+    "payConsequentialLoss": false,
+    "approvalLimitInr": 50000
+  },
+  "totals": {
+    "cases": 27,
+    "passed": 27,
+    "failed": 0,
+    "known_deviations": 6
+  },
+  "suites": [
+    {
+      "suite": "C",
+      "title": "Regression vs past_decisions_oct.csv (decide() only)",
+      "passed": 27,
+      "failed": 0,
+      "cases": [
+        {
+          "id": "C-0901",
+          "suite": "C",
+          "description": "SHP-0950 Kirana Mart damage Rs 2400: humans approve 2400 (Rahul: small claim - goodwill)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 2400,
+            "decided_by": "Rahul",
+            "notes": "small claim - goodwill"
+          },
+          "actual": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R4"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R4"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 2400, pieces 100, POD \"Signed with remarks\" / \"damage noted\"; KNOWN DEVIATION: Rs 2,400 'small claim - goodwill'. No-photo damage claim under Rs 5,000 that the team approved; engine says need_info because SOP rule 2 requires photos and smallClaimPhotoWaiverInr=0. Humans were inconsistent: C-0920 (Rs 4,200, no photo) was sent back for photos.",
+          "known_deviation": true
+        },
+        {
+          "id": "C-0902",
+          "suite": "C",
+          "description": "SHP-0951 Bluewave Electronics damage Rs 15000: humans approve 15000 (Anita)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 15000,
+            "decided_by": "Anita",
+            "notes": ""
+          },
+          "actual": {
+            "decision": "approve",
+            "approved_amount_inr": 15000,
+            "rule_ids": [
+              "R9"
+            ],
+            "reason": "R3: filed 4 days after delivery (window 7). R4: photos attached (1 image file). R9: approve Rs 15,000."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R9"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 15000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0903",
+          "suite": "C",
+          "description": "SHP-0952 Nova Textiles damage Rs 8000: humans reject 0 (Rahul: filed after 7 days)",
+          "expected": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "decided_by": "Rahul",
+            "notes": "filed after 7 days"
+          },
+          "actual": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R3"
+            ],
+            "reason": "R3: filed 9 days after delivery (2026-09-24 -> 2026-10-03); window is 7 days -> reject."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R3"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 8000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0904",
+          "suite": "C",
+          "description": "SHP-0953 Zenith Retail shortage Rs 6000: humans approve 6000 (Anita: key account - 15 day window)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 6000,
+            "decided_by": "Anita",
+            "notes": "key account - 15 day window"
+          },
+          "actual": {
+            "decision": "approve",
+            "approved_amount_inr": 6000,
+            "rule_ids": [
+              "R3",
+              "R9"
+            ],
+            "reason": "R3: filed 12 days after delivery (key-account window 15 for Zenith Retail). R6: POD shows 95 of 100 pieces received (5 short). R9: approve Rs 6,000."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R3",
+            "R9"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 6000, pieces 100, POD \"Signed with remarks\" / \"95 pieces received\""
+        },
+        {
+          "id": "C-0905",
+          "suite": "C",
+          "description": "SHP-0954 Sunrise Foods damage Rs 9000: humans reject 0 (Sameer: POD clean, no remarks)",
+          "expected": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "decided_by": "Sameer",
+            "notes": "POD clean, no remarks"
+          },
+          "actual": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R5"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R5: POD signed \"received in good condition\" with no damage remarks -> reject."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R5"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:false; reconstructed shipment: declared 9000, pieces 100, POD \"Signed - received in good condition\" / \"\""
+        },
+        {
+          "id": "C-0906",
+          "suite": "C",
+          "description": "SHP-0955 Desi Bazaar damage Rs 3100: humans approve 3100 (Sameer: small one, approved)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 3100,
+            "decided_by": "Sameer",
+            "notes": "small one, approved"
+          },
+          "actual": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R4"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R4"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 3100, pieces 100, POD \"Signed with remarks\" / \"damage noted\"; KNOWN DEVIATION: Rs 3,100 'small one, approved'. No-photo damage claim under Rs 5,000 that the team approved; engine says need_info because SOP rule 2 requires photos and smallClaimPhotoWaiverInr=0. Humans were inconsistent: C-0920 (Rs 4,200, no photo) was sent back for photos.",
+          "known_deviation": true
+        },
+        {
+          "id": "C-0907",
+          "suite": "C",
+          "description": "SHP-0956 Orbit Auto Parts damage Rs 88000: humans escalate 64000 (Meera: capped at declared value; manager approved)",
+          "expected": {
+            "decision": "escalate",
+            "approved_amount_inr": 64000,
+            "decided_by": "Meera",
+            "notes": "capped at declared value; manager approved"
+          },
+          "actual": {
+            "decision": "escalate",
+            "approved_amount_inr": 64000,
+            "rule_ids": [
+              "R7",
+              "R8"
+            ],
+            "reason": "R3: filed 4 days after delivery (window 7). R4: photos attached (1 image file). R7: claimed Rs 88,000 capped at declared value Rs 64,000. R8: payable Rs 64,000 exceeds the Rs 50,000 approval limit - Claims Manager approval required (recommended Rs 64,000)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R7",
+            "R8"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 64000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0908",
+          "suite": "C",
+          "description": "SHP-0957 Metro Hardware damage Rs 12500: humans need_info 0 (Anita: asked for photos)",
+          "expected": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "decided_by": "Anita",
+            "notes": "asked for photos"
+          },
+          "actual": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R4"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R4"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 12500, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0909",
+          "suite": "C",
+          "description": "SHP-0958 Apex Pharma damage Rs 4800: humans approve 4800 (Rahul: goodwill)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 4800,
+            "decided_by": "Rahul",
+            "notes": "goodwill"
+          },
+          "actual": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R4"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R4"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 4800, pieces 100, POD \"Signed with remarks\" / \"damage noted\"; KNOWN DEVIATION: Rs 4,800 'goodwill'. No-photo damage claim under Rs 5,000 that the team approved; engine says need_info because SOP rule 2 requires photos and smallClaimPhotoWaiverInr=0. Humans were inconsistent: C-0920 (Rs 4,200, no photo) was sent back for photos.",
+          "known_deviation": true
+        },
+        {
+          "id": "C-0910",
+          "suite": "C",
+          "description": "SHP-0959 Bluewave Electronics damage Rs 11000: humans approve 11000 (Sameer: exception - sales asked)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 11000,
+            "decided_by": "Sameer",
+            "notes": "exception - sales asked"
+          },
+          "actual": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R3"
+            ],
+            "reason": "R3: filed 9 days after delivery (2026-09-30 -> 2026-10-09); window is 7 days -> reject."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R3"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 11000, pieces 100, POD \"Signed with remarks\" / \"damage noted\"; KNOWN DEVIATION: Filed on day 9 (delivered 2026-09-30, filed 2026-10-09) and approved as 'exception - sales asked'. Engine rejects as late (SOP rule 1, 7-day window); exceptions are a human call.",
+          "known_deviation": true
+        },
+        {
+          "id": "C-0911",
+          "suite": "C",
+          "description": "SHP-0960 Zenith Retail damage Rs 14000: humans approve 14000 (Anita: key account window)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 14000,
+            "decided_by": "Anita",
+            "notes": "key account window"
+          },
+          "actual": {
+            "decision": "approve",
+            "approved_amount_inr": 14000,
+            "rule_ids": [
+              "R3",
+              "R9"
+            ],
+            "reason": "R3: filed 13 days after delivery (key-account window 15 for Zenith Retail). R4: photos attached (1 image file). R9: approve Rs 14,000."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R3",
+            "R9"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 14000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0912",
+          "suite": "C",
+          "description": "SHP-0961 Nova Textiles shortage Rs 5000: humans reject 0 (Rahul: POD shows full count)",
+          "expected": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "decided_by": "Rahul",
+            "notes": "POD shows full count"
+          },
+          "actual": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R6"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R6: POD confirms the full count (100 of 100 pieces received) -> reject."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R6"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:false; reconstructed shipment: declared 5000, pieces 100, POD \"Signed - received in good condition\" / \"100 pieces received\""
+        },
+        {
+          "id": "C-0913",
+          "suite": "C",
+          "description": "SHP-0962 Kirana Mart damage Rs 1900: humans approve 1900 (Sameer)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 1900,
+            "decided_by": "Sameer",
+            "notes": ""
+          },
+          "actual": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R4"
+            ],
+            "reason": "R3: filed 1 day after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R4"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 1900, pieces 100, POD \"Signed with remarks\" / \"damage noted\"; KNOWN DEVIATION: Rs 1,900, no note. No-photo damage claim under Rs 5,000 that the team approved; engine says need_info because SOP rule 2 requires photos and smallClaimPhotoWaiverInr=0. Humans were inconsistent: C-0920 (Rs 4,200, no photo) was sent back for photos.",
+          "known_deviation": true
+        },
+        {
+          "id": "C-0914",
+          "suite": "C",
+          "description": "SHP-0963 Zenith Retail damage Rs 7000: humans reject 0 (Anita: 17 days - outside 15 day window)",
+          "expected": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "decided_by": "Anita",
+            "notes": "17 days - outside 15 day window"
+          },
+          "actual": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R3"
+            ],
+            "reason": "R3: filed 17 days after delivery (2026-09-26 -> 2026-10-13); key-account window is 15 days -> reject."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R3"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 7000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0915",
+          "suite": "C",
+          "description": "SHP-0964 Sunrise Foods damage Rs 65000: humans escalate 65000 (Meera: manager approved)",
+          "expected": {
+            "decision": "escalate",
+            "approved_amount_inr": 65000,
+            "decided_by": "Meera",
+            "notes": "manager approved"
+          },
+          "actual": {
+            "decision": "escalate",
+            "approved_amount_inr": 65000,
+            "rule_ids": [
+              "R8"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: photos attached (1 image file). R8: payable Rs 65,000 exceeds the Rs 50,000 approval limit - Claims Manager approval required (recommended Rs 65,000)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R8"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 65000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0916",
+          "suite": "C",
+          "description": "SHP-0965 Desi Bazaar shortage Rs 4500: humans approve 4500 (Rahul: POD: 3 short)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 4500,
+            "decided_by": "Rahul",
+            "notes": "POD: 3 short"
+          },
+          "actual": {
+            "decision": "approve",
+            "approved_amount_inr": 4500,
+            "rule_ids": [
+              "R9"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R6: POD shows 97 of 100 pieces received (3 short). R9: approve Rs 4,500."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R9"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:false; reconstructed shipment: declared 4500, pieces 100, POD \"Signed with remarks\" / \"97 pieces received\""
+        },
+        {
+          "id": "C-0917",
+          "suite": "C",
+          "description": "SHP-0966 Orbit Auto Parts damage Rs 9000: humans reject 0 (Sameer: late)",
+          "expected": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "decided_by": "Sameer",
+            "notes": "late"
+          },
+          "actual": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R3"
+            ],
+            "reason": "R3: filed 9 days after delivery (2026-10-07 -> 2026-10-16); window is 7 days -> reject."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R3"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 9000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0918",
+          "suite": "C",
+          "description": "SHP-0967 Metro Hardware damage Rs 3800: humans approve 3800 (Anita: under 5k)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 3800,
+            "decided_by": "Anita",
+            "notes": "under 5k"
+          },
+          "actual": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R4"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R4"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 3800, pieces 100, POD \"Signed with remarks\" / \"damage noted\"; KNOWN DEVIATION: Rs 3,800 'under 5k'. No-photo damage claim under Rs 5,000 that the team approved; engine says need_info because SOP rule 2 requires photos and smallClaimPhotoWaiverInr=0. Humans were inconsistent: C-0920 (Rs 4,200, no photo) was sent back for photos.",
+          "known_deviation": true
+        },
+        {
+          "id": "C-0919",
+          "suite": "C",
+          "description": "SHP-0968 Apex Pharma damage Rs 21000: humans need_info 0 (Rahul: photos requested)",
+          "expected": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "decided_by": "Rahul",
+            "notes": "photos requested"
+          },
+          "actual": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R4"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R4"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 21000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0920",
+          "suite": "C",
+          "description": "SHP-0969 Nova Textiles damage Rs 4200: humans need_info 0 (Sameer: asked for photos)",
+          "expected": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "decided_by": "Sameer",
+            "notes": "asked for photos"
+          },
+          "actual": {
+            "decision": "need_info",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R4"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R4"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 4200, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0921",
+          "suite": "C",
+          "description": "SHP-0970 Bluewave Electronics damage Rs 52000: humans escalate 52000 (Meera: manager approved)",
+          "expected": {
+            "decision": "escalate",
+            "approved_amount_inr": 52000,
+            "decided_by": "Meera",
+            "notes": "manager approved"
+          },
+          "actual": {
+            "decision": "escalate",
+            "approved_amount_inr": 52000,
+            "rule_ids": [
+              "R8"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: photos attached (1 image file). R8: payable Rs 52,000 exceeds the Rs 50,000 approval limit - Claims Manager approval required (recommended Rs 52,000)."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R8"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 52000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0922",
+          "suite": "C",
+          "description": "SHP-0971 Kirana Mart damage Rs 2000: humans reject 0 (Anita: late - 9 days)",
+          "expected": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "decided_by": "Anita",
+            "notes": "late - 9 days"
+          },
+          "actual": {
+            "decision": "reject",
+            "approved_amount_inr": 0,
+            "rule_ids": [
+              "R3"
+            ],
+            "reason": "R3: filed 9 days after delivery (2026-10-12 -> 2026-10-21); window is 7 days -> reject."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R3"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 2000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0931",
+          "suite": "C",
+          "description": "SHP-0987 Apex Pharma damage Rs 6500: humans approve 6500 (Rahul: paid 2026-10-20, ref PAY-7781)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 6500,
+            "decided_by": "Rahul",
+            "notes": "paid 2026-10-20, ref PAY-7781"
+          },
+          "actual": {
+            "decision": "approve",
+            "approved_amount_inr": 6500,
+            "rule_ids": [
+              "R9"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: photos attached (1 image file). R9: approve Rs 6,500."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R9"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 6500, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0932",
+          "suite": "C",
+          "description": "SHP-0972 Sunrise Foods shortage Rs 7000: humans approve 7000 (Sameer: POD: 5 short)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 7000,
+            "decided_by": "Sameer",
+            "notes": "POD: 5 short"
+          },
+          "actual": {
+            "decision": "approve",
+            "approved_amount_inr": 7000,
+            "rule_ids": [
+              "R9"
+            ],
+            "reason": "R3: filed 1 day after delivery (window 7). R6: POD shows 95 of 100 pieces received (5 short). R9: approve Rs 7,000."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R9"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:false; reconstructed shipment: declared 7000, pieces 100, POD \"Signed with remarks\" / \"95 pieces received\""
+        },
+        {
+          "id": "C-0933",
+          "suite": "C",
+          "description": "SHP-0973 Zenith Retail damage Rs 18000: humans approve 18000 (Anita: key account - 15 day window)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 18000,
+            "decided_by": "Anita",
+            "notes": "key account - 15 day window"
+          },
+          "actual": {
+            "decision": "approve",
+            "approved_amount_inr": 18000,
+            "rule_ids": [
+              "R3",
+              "R9"
+            ],
+            "reason": "R3: filed 12 days after delivery (key-account window 15 for Zenith Retail). R4: photos attached (1 image file). R9: approve Rs 18,000."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R3",
+            "R9"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 18000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "C-0934",
+          "suite": "C",
+          "description": "SHP-0974 Orbit Auto Parts damage Rs 30000: humans approve 26000 (Rahul: capped at declared value)",
+          "expected": {
+            "decision": "approve",
+            "approved_amount_inr": 26000,
+            "decided_by": "Rahul",
+            "notes": "capped at declared value"
+          },
+          "actual": {
+            "decision": "approve",
+            "approved_amount_inr": 26000,
+            "rule_ids": [
+              "R7",
+              "R9"
+            ],
+            "reason": "R3: filed 2 days after delivery (window 7). R4: photos attached (1 image file). R7: claimed Rs 30,000 capped at declared value Rs 26,000. R9: approve Rs 26,000."
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [
+            "R7",
+            "R9"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "pod_assumed:true; reconstructed shipment: declared 26000, pieces 100, POD \"Signed with remarks\" / \"damage noted\""
+        },
+        {
+          "id": "regression-set",
+          "suite": "C",
+          "description": "26 October rows replayed; every KNOWN_DEVIATIONS id exists in the file",
+          "expected": {
+            "rows": 26,
+            "known_deviation_ids": [
+              "C-0901",
+              "C-0906",
+              "C-0909",
+              "C-0913",
+              "C-0918",
+              "C-0910"
+            ]
+          },
+          "actual": {
+            "rows": 26,
+            "agree": 20,
+            "known_deviations": 6,
+            "unexpected": 0
+          },
+          "pass": true,
+          "failures": [],
+          "rules_fired": [],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "Expected with default policy: 20 agree, 6 known deviations."
+        }
+      ],
+      "agreement": {
+        "rows": 26,
+        "agree": 20,
+        "known_deviations": 6,
+        "unexpected": 0,
+        "rate_pct": 76.9
+      }
+    }
+  ]
+}

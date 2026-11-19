@@ -1,0 +1,818 @@
+{
+  "run_id": "2026-11-19T10-13-08Z-groq",
+  "timestamp": "2026-11-19T10-13-08Z",
+  "mode": "groq",
+  "model": "openai/gpt-oss-120b",
+  "git_sha": "9467ea7",
+  "git_dirty": true,
+  "node": "v24.16.0",
+  "config": {
+    "defaultWindowDays": 7,
+    "keyAccountWindows": {
+      "Zenith Retail": 15
+    },
+    "smallClaimPhotoWaiverInr": 0,
+    "shortageProRata": false,
+    "payConsequentialLoss": false,
+    "approvalLimitInr": 50000
+  },
+  "totals": {
+    "cases": 16,
+    "passed": 0,
+    "failed": 16,
+    "known_deviations": 0
+  },
+  "suites": [
+    {
+      "suite": "E",
+      "title": "Golden set in groq mode (real LLM extract + draft)",
+      "passed": 0,
+      "failed": 16,
+      "cases": [
+        {
+          "id": "C01",
+          "suite": "E",
+          "description": "SHP-1001 approve 18000",
+          "expected": [
+            {
+              "shipment_id": "SHP-1001",
+              "decision": "approve",
+              "amount": 18000
+            }
+          ],
+          "actual": {
+            "claim_id": "C01",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C01",
+                "shipment_id": "SHP-1001",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1001.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C01.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1001): decision expected approve, got escalate",
+            "row 1 (SHP-1001): amount expected 18000, got 0"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C01.txt, groq mode"
+        },
+        {
+          "id": "C02",
+          "suite": "E",
+          "description": "SHP-1002 reject 0 (11 days)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1002",
+              "decision": "reject",
+              "amount": 0,
+              "reasonMatches": [
+                "\\b11\\s+(?:calendar\\s+)?days?\\b"
+              ]
+            }
+          ],
+          "actual": {
+            "claim_id": "C02",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C02",
+                "shipment_id": "SHP-1002",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1002.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C02.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1002): decision expected reject, got escalate",
+            "row 1 (SHP-1002): reason does not match /\\b11\\s+(?:calendar\\s+)?days?\\b/i (reason: E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.)"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C02.txt, groq mode"
+        },
+        {
+          "id": "C03",
+          "suite": "E",
+          "description": "SHP-1003 approve 9000 (key account, POD 37/40)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1003",
+              "decision": "approve",
+              "amount": 9000
+            }
+          ],
+          "actual": {
+            "claim_id": "C03",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C03",
+                "shipment_id": "SHP-1003",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1003.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C03.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1003): decision expected approve, got escalate",
+            "row 1 (SHP-1003): amount expected 9000, got 0"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C03.txt, groq mode"
+        },
+        {
+          "id": "C04",
+          "suite": "E",
+          "description": "SHP-1004 need_info 0 (no photos)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1004",
+              "decision": "need_info",
+              "amount": 0
+            }
+          ],
+          "actual": {
+            "claim_id": "C04",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C04",
+                "shipment_id": "SHP-1004",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1004.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C04.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1004): decision expected need_info, got escalate"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C04.txt, groq mode"
+        },
+        {
+          "id": "C05",
+          "suite": "E",
+          "description": "SHP-1005 need_info 0 (says photos attached, none)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1005",
+              "decision": "need_info",
+              "amount": 0
+            }
+          ],
+          "actual": {
+            "claim_id": "C05",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C05",
+                "shipment_id": "SHP-1005",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1005.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C05.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1005): decision expected need_info, got escalate"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C05.txt, groq mode"
+        },
+        {
+          "id": "C06",
+          "suite": "E",
+          "description": "SHP-1006 escalate 72000 (capped, above limit)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1006",
+              "decision": "escalate",
+              "amount": 72000
+            }
+          ],
+          "actual": {
+            "claim_id": "C06",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C06",
+                "shipment_id": "SHP-1006",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1006.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C06.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1006): amount expected 72000, got 0"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C06.txt, groq mode"
+        },
+        {
+          "id": "C07",
+          "suite": "E",
+          "description": "SHP-1007 reject 0 (clean POD)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1007",
+              "decision": "reject",
+              "amount": 0
+            }
+          ],
+          "actual": {
+            "claim_id": "C07",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C07",
+                "shipment_id": "SHP-1007",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1007.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C07.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1007): decision expected reject, got escalate"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C07.txt, groq mode"
+        },
+        {
+          "id": "C08",
+          "suite": "E",
+          "description": "SHP-0987 duplicate 0 (C-0931 / PAY-7781)",
+          "expected": [
+            {
+              "shipment_id": "SHP-0987",
+              "decision": "duplicate",
+              "amount": 0,
+              "reasonIncludes": [
+                "C-0931",
+                "PAY-7781"
+              ],
+              "draftIncludes": [
+                "C-0931",
+                "PAY-7781"
+              ]
+            }
+          ],
+          "actual": {
+            "claim_id": "C08",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C08",
+                "shipment_id": "SHP-0987",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-0987.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C08.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-0987): decision expected duplicate, got escalate",
+            "row 1 (SHP-0987): reason does not mention \"C-0931\" (reason: E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.)",
+            "row 1 (SHP-0987): reason does not mention \"PAY-7781\" (reason: E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.)",
+            "row 1 (SHP-0987): draft does not mention \"C-0931\"",
+            "row 1 (SHP-0987): draft does not mention \"PAY-7781\""
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C08.txt, groq mode"
+        },
+        {
+          "id": "C09",
+          "suite": "E",
+          "description": "SHP-1009 approve 7500 (Hinglish shortage)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1009",
+              "decision": "approve",
+              "amount": 7500
+            }
+          ],
+          "actual": {
+            "claim_id": "C09",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C09",
+                "shipment_id": "SHP-1009",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1009.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C09.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1009): decision expected approve, got escalate",
+            "row 1 (SHP-1009): amount expected 7500, got 0",
+            "row 1 (SHP-1009): validateDraft failed: draft is not in Hinglish (romanised Hindi mixed with English), the customer's language"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C09.txt, groq mode"
+        },
+        {
+          "id": "C10",
+          "suite": "E",
+          "description": "SHP-1010 approve 4000 (email wrote SHP-1O10)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1010",
+              "decision": "approve",
+              "amount": 4000
+            }
+          ],
+          "actual": {
+            "claim_id": "C10",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C10",
+                "shipment_id": "SHP-1010",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1010.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C10.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1010): decision expected approve, got escalate",
+            "row 1 (SHP-1010): amount expected 4000, got 0"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C10.txt, groq mode"
+        },
+        {
+          "id": "C11",
+          "suite": "E",
+          "description": "SHP-1011 reject 0 (POD full count)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1011",
+              "decision": "reject",
+              "amount": 0
+            }
+          ],
+          "actual": {
+            "claim_id": "C11",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C11",
+                "shipment_id": "SHP-1011",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1011.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C11.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1011): decision expected reject, got escalate"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C11.txt, groq mode"
+        },
+        {
+          "id": "C12",
+          "suite": "E",
+          "description": "SHP-1012 reject 0 (8 days)",
+          "expected": [
+            {
+              "shipment_id": "SHP-1012",
+              "decision": "reject",
+              "amount": 0,
+              "reasonMatches": [
+                "\\b8\\s+(?:calendar\\s+)?days?\\b"
+              ]
+            }
+          ],
+          "actual": {
+            "claim_id": "C12",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C12",
+                "shipment_id": "SHP-1012",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1012.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C12.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1012): decision expected reject, got escalate",
+            "row 1 (SHP-1012): reason does not match /\\b8\\s+(?:calendar\\s+)?days?\\b/i (reason: E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.)"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C12.txt, groq mode"
+        },
+        {
+          "id": "C13",
+          "suite": "E",
+          "description": "SHP-1013 escalate 58000",
+          "expected": [
+            {
+              "shipment_id": "SHP-1013",
+              "decision": "escalate",
+              "amount": 58000
+            }
+          ],
+          "actual": {
+            "claim_id": "C13",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C13",
+                "shipment_id": "SHP-1013",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1013.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C13.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1 (SHP-1013): amount expected 58000, got 0"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C13.txt, groq mode"
+        },
+        {
+          "id": "C14",
+          "suite": "E",
+          "description": "SHP-1014 approve 6000 + SHP-1015 need_info 0",
+          "expected": [
+            {
+              "shipment_id": "SHP-1014",
+              "decision": "approve",
+              "amount": 6000
+            },
+            {
+              "shipment_id": "SHP-1015",
+              "decision": "need_info",
+              "amount": 0
+            }
+          ],
+          "actual": {
+            "claim_id": "C14",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C14",
+                "shipment_id": "SHP-1014",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1014.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C14.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "expected 2 row(s), got 1",
+            "row 1 (SHP-1014): decision expected approve, got escalate",
+            "row 1 (SHP-1014): amount expected 6000, got 0",
+            "row 2: missing (expected SHP-1015 need_info 0)"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C14.txt, groq mode"
+        },
+        {
+          "id": "C15",
+          "suite": "E",
+          "description": "not_a_claim 0 (invoice copy request)",
+          "expected": [
+            {
+              "decision": "not_a_claim",
+              "amount": 0
+            }
+          ],
+          "actual": {
+            "claim_id": "C15",
+            "idempotent_replay": false,
+            "rows": [
+              {
+                "claim_id": "C15",
+                "shipment_id": "SHP-1016",
+                "decision": "escalate",
+                "approved_amount_inr": 0,
+                "reason": "E1: automatic extraction failed (extraction failed: groq HTTP 401: {\"error\":{\"message\":\"Invalid API Key\",\"type\":\"invalid_request_error\",\"code\":\"invalid_api_key\"}}) - no decision made, manual review required.",
+                "draft_reply": "Dear Customer,\n\nThank you for contacting RouteMax about shipment SHP-1016.\n\nDecision: your claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.\n\nReason: We could not process your email automatically, so it has been passed to our claims team for manual review.\n\nThis decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C15.\n\nRegards,\nRouteMax Claims Desk",
+                "rule_ids": [
+                  "E1"
+                ]
+              }
+            ]
+          },
+          "pass": false,
+          "failures": [
+            "row 1: decision expected not_a_claim, got escalate"
+          ],
+          "rules_fired": [
+            "E1"
+          ],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C15.txt, groq mode"
+        },
+        {
+          "id": "total-rows",
+          "suite": "E",
+          "description": "exactly 16 result rows across the 15 emails",
+          "expected": {
+            "emails": 15,
+            "rows": 16
+          },
+          "actual": {
+            "emails": 15,
+            "rows": 15,
+            "emails_crashed": 0
+          },
+          "pass": false,
+          "failures": [
+            "expected 16 rows, got 15"
+          ],
+          "rules_fired": [],
+          "config": {
+            "defaultWindowDays": 7,
+            "keyAccountWindows": {
+              "Zenith Retail": 15
+            },
+            "smallClaimPhotoWaiverInr": 0,
+            "shortageProRata": false,
+            "payConsequentialLoss": false,
+            "approvalLimitInr": 50000
+          },
+          "fail_mode": "none",
+          "notes": "C14 carries two claims, so 15 emails => 16 rows."
+        }
+      ]
+    }
+  ]
+}

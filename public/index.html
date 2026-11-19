@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>RouteMax Claims Desk</title>
+<style>
+  :root {
+    --bg: #f4f5f7; --card: #ffffff; --ink: #1c2330; --muted: #5d6778; --line: #dfe3ea;
+    --accent: #1f5fbf; --accent-ink: #ffffff;
+    --approve: #1b7f4b; --approve-bg: #e3f4ea;
+    --reject: #b3261e; --reject-bg: #fbe6e4;
+    --need: #8a5a00; --need-bg: #fdf0d0;
+    --escalate: #6a3fb5; --escalate-bg: #ece4fa;
+    --duplicate: #2f5d7c; --duplicate-bg: #e1edf5;
+    --notclaim: #4c5563; --notclaim-bg: #e8eaee;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { background: #152238; color: #fff; padding: 12px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  header h1 { font-size: 18px; margin: 0; font-weight: 650; }
+  header .sub { color: #b7c3d8; font-size: 13px; }
+  #health { margin-left: auto; font-size: 12px; padding: 4px 10px; border-radius: 999px; background: #2a3a57; color: #dbe5f5; }
+  #health.ok { background: #1d5a3a; color: #dff5e7; }
+  #health.warn { background: #6b4a00; color: #ffeec2; }
+  #health.bad { background: #7a1f19; color: #ffe1de; }
+  main { max-width: 1280px; margin: 0 auto; padding: 20px 24px 8px; display: grid; gap: 16px; grid-template-columns: minmax(320px, 440px) 1fr; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+  .card h2 { font-size: 15px; margin: 0 0 12px; }
+  .wide { grid-column: 1 / -1; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin: 10px 0 4px; }
+  textarea, input[type=text], select { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 8px; font: inherit; background: #fff; color: var(--ink); }
+  textarea { min-height: 220px; resize: vertical; font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; }
+  .row { display: flex; gap: 12px; }
+  .row > div { flex: 1; min-width: 0; }
+  button { font: inherit; border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 6px; padding: 7px 12px; cursor: pointer; }
+  button:hover { background: #f0f3f8; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  button.primary:hover { background: #184d9d; }
+  button.small { padding: 3px 8px; font-size: 12px; }
+  button.danger { color: var(--reject); border-color: #e7b9b5; }
+  button:disabled { opacity: .55; cursor: progress; }
+  .actions { display: flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+  .status { font-size: 13px; color: var(--muted); }
+  .status.error { color: var(--reject); font-weight: 600; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .result { border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+  .result-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+  .d-approve { color: var(--approve); background: var(--approve-bg); }
+  .d-reject { color: var(--reject); background: var(--reject-bg); }
+  .d-need_info { color: var(--need); background: var(--need-bg); }
+  .d-escalate { color: var(--escalate); background: var(--escalate-bg); }
+  .d-duplicate { color: var(--duplicate); background: var(--duplicate-bg); }
+  .d-not_a_claim { color: var(--notclaim); background: var(--notclaim-bg); }
+  .amount { font-weight: 700; font-size: 15px; }
+  .meta { color: var(--muted); font-size: 12.5px; }
+  .reason { margin: 6px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 6px 0; }
+  .chip { font: 12px ui-monospace, Consolas, monospace; background: #eef1f6; border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; }
+  .notice { background: var(--need-bg); color: var(--need); border-radius: 6px; padding: 6px 10px; font-size: 12.5px; font-weight: 600; margin-bottom: 8px; }
+  details { margin: 6px 0; }
+  summary { cursor: pointer; color: var(--muted); font-size: 12.5px; }
+  .trace { list-style: none; margin: 6px 0 0; padding: 0; font-size: 12.5px; }
+  .trace li { padding: 3px 0; border-top: 1px dashed var(--line); display: flex; gap: 8px; }
+  .trace .rule { font-family: ui-monospace, Consolas, monospace; min-width: 38px; font-weight: 700; }
+  .trace .outcome { min-width: 36px; text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--muted); }
+  .trace .outcome.fire { color: var(--reject); }
+  .trace .outcome.pass { color: var(--approve); }
+  .draft-head { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+  .draft-head span { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .draft { white-space: pre-wrap; overflow-wrap: anywhere; background: #f7f8fa; border: 1px solid var(--line); border-radius: 6px; padding: 10px; margin: 4px 0 0; font: 13px/1.5 system-ui, sans-serif; max-height: 320px; overflow: auto; }
+  .empty { color: var(--muted); font-style: italic; }
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .toolbar .spacer { flex: 1; }
+  a.link { color: var(--accent); font-weight: 600; text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f0f3f8; font-size: 12px; color: var(--muted); position: sticky; top: 0; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: #f6f8fc; }
+  tbody tr.selected { background: #e9f0fc; }
+  td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.nowrap { white-space: nowrap; }
+  #detail { margin-top: 12px; }
+  footer { max-width: 1280px; margin: 0 auto; padding: 10px 24px 24px; color: var(--muted); font-size: 12.5px; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>RouteMax Claims Desk</h1>
+  <span class="sub">Extract &rarr; decide (rules) &rarr; draft, for human review</span>
+  <span id="health">checking service&hellip;</span>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Process claim email(s)</h2>
+    <label for="email">Paste one raw email (headers, blank line, body)</label>
+    <textarea id="email" spellcheck="false" placeholder="From: ops@example.in&#10;Date: 2026-11-10 09:12&#10;Subject: Damage claim SHP-1001&#10;Attachments: IMG_4410.jpg&#10;&#10;Hi team, ..."></textarea>
+    <label for="files">&hellip;or upload one or more .txt files</label>
+    <input id="files" type="file" accept=".txt,text/plain" multiple>
+    <div class="hint">Several files are processed in file-name order; the claim id is the file name without its extension.</div>
+    <div class="row">
+      <div>
+        <label for="claimId">Claim id (optional)</label>
+        <input id="claimId" type="text" maxlength="64" placeholder="e.g. C01" autocomplete="off">
+      </div>
+      <div>
+        <label for="failMode">Simulate lookup failure</label>
+        <select id="failMode">
+          <option value="none">none</option>
+          <option value="error">error</option>
+          <option value="timeout">timeout</option>
+          <option value="not_found">not_found</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="submit" class="primary" type="button">Submit</button>
+      <button id="clear" type="button">Clear</button>
+      <span id="status" class="status" role="status"></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Result</h2>
+    <div id="results"><p class="empty">Submit an email to see the decision, the rules that fired and the draft reply.</p></div>
+  </section>
+
+  <section class="card wide">
+    <div class="toolbar">
+      <h2 style="margin:0">All processed claims <span id="count" class="meta"></span></h2>
+      <span class="spacer"></span>
+      <button id="refresh" type="button">Refresh</button>
+      <a class="link" href="/results.csv" download="results.csv">Download results.csv</a>
+      <button id="reset" class="small danger" type="button">Reset demo state</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>claim_id</th><th>shipment_id</th><th>decision</th><th>amount (INR)</th><th>reason</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div id="detail"></div>
+  </section>
+</main>
+
+<footer>Drafts only — nothing is sent or paid without human review.</footer>
+
+<script>
+"use strict";
+// All server / email text is rendered with textContent only. Email content is untrusted.
+(function () {
+  var BATCH_CHUNK = 4; // files per /claims/batch request: keeps each request short and shows progress
+  var $ = function (id) { return document.getElementById(id); };
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined && text !== null) node.textContent = String(text);
+    return node;
+  }
+  function inr(n) {
+    var v = Number(n);
+    return "Rs " + (isFinite(v) ? v.toLocaleString("en-IN") : "0");
+  }
+  function decisionBadge(decision) {
+    var known = ["approve", "reject", "need_info", "escalate", "duplicate", "not_a_claim"];
+    var d = String(decision);
+    return el("span", "badge " + (known.indexOf(d) >= 0 ? "d-" + d : "d-not_a_claim"), d.replace(/_/g, " "));
+  }
+  function setStatus(text, isError) {
+    var s = $("status");
+    s.textContent = text || "";
+    s.className = "status" + (isError ? " error" : "");
+  }
+
+  async function api(path, options) {
+    var res = await fetch(path, options || {});
+    var type = res.headers.get("content-type") || "";
+    var data = type.indexOf("application/json") >= 0 ? await res.json() : null;
+    if (!res.ok) throw new Error((data && data.error) || ("Request failed (HTTP " + res.status + ")"));
+    return { data: data, effectiveFail: res.headers.get("x-lookup-fail-effective") || "none" };
+  }
+
+  /* ---------------------------------------------------------- rendering */
+
+  function renderRow(row, detail, opts) {
+    var box = el("div", "result");
+    if (opts && opts.replay) box.appendChild(el("div", "notice", "Already processed (idempotent replay) — stored result shown, nothing new was written."));
+
+    var head = el("div", "result-head");
+    head.appendChild(decisionBadge(row.decision));
+    head.appendChild(el("span", "amount", inr(row.approved_amount_inr)));
+    head.appendChild(el("span", "meta", "claim " + row.claim_id));
+    head.appendChild(el("span", "meta", "shipment " + (row.shipment_id || "—")));
+    box.appendChild(head);
+
+    box.appendChild(el("div", "reason", row.reason));
+
+    var ruleIds = (detail && detail.rule_ids) || [];
+    var chips = el("div", "chips");
+    chips.appendChild(el("span", "meta", "Rules fired:"));
+    if (ruleIds.length === 0) chips.appendChild(el("span", "meta", "none"));
+    ruleIds.forEach(function (id) { chips.appendChild(el("span", "chip", id)); });
+    box.appendChild(chips);
+
+    var trace = (detail && detail.trace) || [];
+    if (trace.length > 0) {
+      var d = el("details");
+      d.appendChild(el("summary", null, "Full rule trace (" + trace.length + " steps)"));
+      var list = el("ul", "trace");
+      trace.forEach(function (t) {
+        var li = el("li");
+        li.appendChild(el("span", "rule", t.rule));
+        li.appendChild(el("span", "outcome " + (t.outcome === "fire" ? "fire" : t.outcome === "pass" ? "pass" : ""), t.outcome));
+        li.appendChild(el("span", null, t.note));
+        list.appendChild(li);
+      });
+      d.appendChild(list);
+      box.appendChild(d);
+    }
+
+    var draftHead = el("div", "draft-head");
+    draftHead.appendChild(el("span", null, "Draft reply (not sent)"));
+    var copy = el("button", "small", "Copy");
+    copy.type = "button";
+    copy.addEventListener("click", function () { copyText(row.draft_reply, copy); });
+    draftHead.appendChild(copy);
+    box.appendChild(draftHead);
+    box.appendChild(el("pre", "draft", row.draft_reply));
+    return box;
+  }
+
+  async function copyText(text, button) {
+    try {
+      await navigator.clipboard.writeText(String(text));
+    } catch (e) {
+      var ta = el("textarea");
+      ta.value = String(text);
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (e2) { /* nothing more we can do */ }
+      ta.remove();
+    }
+    button.textContent = "Copied";
+    setTimeout(function () { button.textContent = "Copy"; }, 1500);
+  }
+
+  function renderResults(results, effectiveFail) {
+    var host = $("results");
+    host.replaceChildren();
+    if (effectiveFail && effectiveFail !== "none") {
+      host.appendChild(el("div", "notice", "Shipment lookup failure simulated for this request: " + effectiveFail));
+    }
+    results.forEach(function (result) {
+      var rows = result.rows || [];
+      if (rows.length === 0) host.appendChild(el("p", "empty", "No result rows for " + result.claim_id + "."));
+      rows.forEach(function (row, i) {
+        host.appendChild(renderRow(row, (result.details || [])[i], { replay: result.idempotent_replay === true }));
+      });
+    });
+  }
+
+  function renderTable(payload) {
+    var tbody = $("rows");
+    tbody.replaceChildren();
+    $("detail").replaceChildren();
+    var claims = (payload && payload.claims) || [];
+    var rowCount = 0;
+    claims.forEach(function (claim) {
+      (claim.rows || []).forEach(function (row, i) {
+        rowCount++;
+        var tr = el("tr");
+        tr.appendChild(el("td", "nowrap", row.claim_id));
+        tr.appendChild(el("td", "nowrap", row.shipment_id || "—"));
+        var dc = el("td", "nowrap");
+        dc.appendChild(decisionBadge(row.decision));
+        tr.appendChild(dc);
+        tr.appendChild(el("td", "num", Number(row.approved_amount_inr).toLocaleString("en-IN")));
+        tr.appendChild(el("td", null, row.reason));
+        tr.addEventListener("click", function () {
+          Array.prototype.forEach.call(tbody.children, function (r) { r.classList.remove("selected"); });
+          tr.classList.add("selected");
+          var detail = $("detail");
+          detail.replaceChildren(renderRow(row, (claim.details || [])[i], null));
+          detail.appendChild(el("div", "meta", "Processed " + claim.processed_at + " · " + claim.llm_mode + " / " + claim.model + " · email hash " + String(claim.email_hash).slice(0, 12) + "…"));
+        });
+        tbody.appendChild(tr);
+      });
+    });
+    if (rowCount === 0) {
+      var tr = el("tr");
+      var td = el("td", "empty", "Nothing processed yet.");
+      td.colSpan = 5;
+      tr.appendChild(td);
+      tr.style.cursor = "default";
+      tbody.appendChild(tr);
+    }
+    $("count").textContent = "(" + ((payload && payload.count) || 0) + " emails, " + rowCount + " rows)";
+  }
+
+  /* ------------------------------------------------------------ actions */
+
+  async function loadHealth() {
+    var badge = $("health");
+    try {
+      var h = (await api("/health")).data;
+      var text = "LLM: " + h.llm_mode + " · " + h.model;
+      var cls = "ok";
+      if (h.llm_mode_requested === "groq" && h.llm_mode !== "groq") { text += " (no Groq key: offline mock)"; cls = "warn"; }
+      if (h.lookup_fail_mode && h.lookup_fail_mode !== "none") { text += " · lookup: " + h.lookup_fail_mode; cls = "warn"; }
+      badge.textContent = text;
+      badge.className = cls;
+      $("failMode").disabled = !h.fault_injection_allowed;
+      $("reset").hidden = !h.fault_injection_allowed;
+    } catch (e) {
+      badge.textContent = "service unavailable";
+      badge.className = "bad";
+    }
+  }
+
+  async function loadClaims() {
+    try {
+      renderTable((await api("/claims")).data);
+    } catch (e) {
+      setStatus("Could not load results: " + e.message, true);
+    }
+  }
+
+  function requestHeaders() {
+    var headers = { "content-type": "application/json" };
+    var mode = $("failMode").value;
+    if (mode && mode !== "none" && !$("failMode").disabled) headers["x-lookup-fail"] = mode;
+    return headers;
+  }
+  function claimIdFromFile(name) {
+    var base = String(name).replace(/\.[^.]*$/, "").replace(/[^A-Za-z0-9._-]+/g, "_").replace(/^[^A-Za-z0-9]+/, "");
+    return base.slice(0, 64) || undefined;
+  }
+
+  async function submit() {
+    var files = Array.prototype.slice.call($("files").files || []);
+    var pasted = $("email").value;
+    var claimId = $("claimId").value.trim() || undefined;
+    var button = $("submit");
+    if (files.length === 0 && pasted.trim() === "") { setStatus("Paste an email or choose at least one .txt file.", true); return; }
+
+    button.disabled = true;
+    try {
+      var results = [];
+      var effectiveFail = "none";
+      if (files.length <= 1) {
+        var email = files.length === 1 ? await files[0].text() : pasted;
+        if (files.length === 1 && !claimId) claimId = claimIdFromFile(files[0].name);
+        setStatus("Processing…");
+        var single = await api("/claims", { method: "POST", headers: requestHeaders(), body: JSON.stringify({ email: email, claim_id: claimId }) });
+        results.push(single.data);
+        effectiveFail = single.effectiveFail;
+      } else {
+        files.sort(function (a, b) { return a.name.localeCompare(b.name, undefined, { numeric: true }); });
+        for (var start = 0; start < files.length; start += BATCH_CHUNK) {
+          var chunk = files.slice(start, start + BATCH_CHUNK);
+          setStatus("Processing " + (start + 1) + "–" + (start + chunk.length) + " of " + files.length + "…");
+          var emails = [];
+          for (var i = 0; i < chunk.length; i++) emails.push({ email: await chunk[i].text(), claim_id: claimIdFromFile(chunk[i].name) });
+          var batch = await api("/claims/batch", { method: "POST", headers: requestHeaders(), body: JSON.stringify({ emails: emails }) });
+          results = results.concat(batch.data.results || []);
+          effectiveFail = batch.effectiveFail;
+          renderResults(results, effectiveFail);
+        }
+      }
+      renderResults(results, effectiveFail);
+      var replays = results.filter(function (r) { return r.idempotent_replay; }).length;
+      setStatus("Done: " + results.length + " email(s)" + (replays ? ", " + replays + " already processed" : "") + ".");
+    } catch (e) {
+      setStatus(e.message || "Request failed", true);
+    } finally {
+      button.disabled = false;
+      loadClaims();
+    }
+  }
+
+  async function resetState() {
+    if (!window.confirm("Wipe all processed claims and the audit log? (demo state only)")) return;
+    try {
+      await api("/admin/reset", { method: "POST" });
+      $("results").replaceChildren(el("p", "empty", "State reset."));
+      setStatus("Demo state reset.");
+    } catch (e) {
+      setStatus(e.message, true);
+    }
+    loadClaims();
+  }
+
+  $("submit").addEventListener("click", submit);
+  $("refresh").addEventListener("click", function () { loadHealth(); loadClaims(); });
+  $("reset").addEventListener("click", resetState);
+  $("clear").addEventListener("click", function () {
+    $("email").value = ""; $("claimId").value = ""; $("files").value = ""; setStatus("");
+  });
+
+  loadHealth();
+  loadClaims();
+})();
+</script>
+</body>
+</html>

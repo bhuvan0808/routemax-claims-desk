@@ -1,0 +1,204 @@
+claim_id,shipment_id,decision,approved_amount_inr,reason,draft_reply
+C01,SHP-1001,approve,18000,"R3: filed 3 days after delivery (window 7). R4: photos attached (2 image files). R9: approve Rs 18,000.","Dear Deepa,
+
+Thank you for contacting RouteMax about shipment SHP-1001.
+
+Decision: your damage claim has been approved for Rs 18,000.
+
+Reason: Your damage claim has been checked against the delivery record and approved.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C01.
+
+Regards,
+RouteMax Claims Desk"
+C02,SHP-1002,reject,0,R3: filed 11 days after delivery (2026-10-30 -> 2026-11-10); window is 7 days -> reject.,"Dear Karan,
+
+Thank you for contacting RouteMax about shipment SHP-1002.
+
+Decision: we are unable to approve this damage claim and it has been rejected.
+
+Reason: The claim was filed 11 days after delivery, which is outside our 7-day claims window.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C02.
+
+Regards,
+RouteMax Claims Desk"
+C03,SHP-1003,approve,9000,"R3: filed 12 days after delivery (key-account window 15 for Zenith Retail). R6: POD shows 37 of 40 pieces received (3 short). R9: approve Rs 9,000.","Dear Zenith Retail - Inward team,
+
+Thank you for contacting RouteMax about shipment SHP-1003.
+
+Decision: your shortage claim has been approved for Rs 9,000.
+
+Reason: Your shortage claim has been checked against the delivery record and approved.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C03.
+
+Regards,
+RouteMax Claims Desk"
+C04,SHP-1004,need_info,0,R3: filed 2 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos).,"Dear Ravi,
+
+Thank you for contacting RouteMax about shipment SHP-1004.
+
+Decision: we need more information before we can process this damage claim.
+
+Reason: Damage claims need photos of the damaged goods before we can decide, and we do not have photos for this claim.
+
+Please send us:
+- clear photos of the damaged goods and the packaging
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C04.
+
+Regards,
+RouteMax Claims Desk"
+C05,SHP-1005,need_info,0,R3: filed 4 days after delivery (window 7). R4: no image attachments in the email headers -> need_info (photos).,"Dear Nova Textiles,
+
+Thank you for contacting RouteMax about shipment SHP-1005.
+
+Decision: we need more information before we can process this damage claim.
+
+Reason: Damage claims need photos of the damaged goods before we can decide, and we do not have photos for this claim.
+
+Please send us:
+- clear photos of the damaged goods and the packaging
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C05.
+
+Regards,
+RouteMax Claims Desk"
+C06,SHP-1006,escalate,72000,"R3: filed 5 days after delivery (window 7). R4: photos attached (3 image files). R7: claimed Rs 95,000 capped at declared value Rs 72,000. R8b: claim includes consequential loss (downtime, lost sales or similar), which is not payable; the goods-only value must be confirmed by the Claims Manager (recommended upper bound Rs 72,000). R8: payable Rs 72,000 exceeds the Rs 50,000 approval limit - Claims Manager approval required (recommended Rs 72,000).","Dear Vikram,
+
+Thank you for contacting RouteMax about shipment SHP-1006.
+
+Decision: your damage claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.
+
+Reason: Your claim includes losses beyond the value of the goods themselves, which our claims policy does not cover, so it has been forwarded to our Claims Manager to confirm the payable value of the goods. Claims of this value also need approval from our Claims Manager. Please note that the payable amount is limited to the declared value of the shipment.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C06.
+
+Regards,
+RouteMax Claims Desk"
+C07,SHP-1007,reject,0,"R3: filed 6 days after delivery (window 7). R5: POD signed ""received in good condition"" with no damage remarks -> reject.","Dear Sunrise Foods QA,
+
+Thank you for contacting RouteMax about shipment SHP-1007.
+
+Decision: we are unable to approve this damage claim and it has been rejected.
+
+Reason: The proof of delivery was signed as received in good condition with no remarks, so we are unable to accept a damage claim for this shipment.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C07.
+
+Regards,
+RouteMax Claims Desk"
+C08,SHP-0987,duplicate,0,"R1: duplicate of C-0931 (approve, paid 2026-10-20, ref PAY-7781) -> no second decision or payout.","Dear Deepa,
+
+Thank you for contacting RouteMax about shipment SHP-0987.
+
+Decision: this is a duplicate of a claim that has already been decided for this shipment, so no new claim has been opened.
+
+Earlier claim C-0931 was approved and paid on 2026-10-20 (payment reference PAY-7781).
+
+Reason: A claim for this shipment was already approved under claim C-0931 (paid on 2026-10-20, payment reference PAY-7781), so we cannot process it a second time.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C08.
+
+Regards,
+RouteMax Claims Desk"
+C09,SHP-1009,approve,7500,"R3: filed 2 days after delivery (window 7). R6: POD shows 20 of 25 pieces received (5 short). R9: approve Rs 7,500.","Namaste Suresh ji,
+
+RouteMax ko likhne ke liye dhanyavaad. Yeh reply aapke shipment SHP-1009 ke baare mein hai.
+
+Decision: aapka shortage claim approve ho gaya hai. Approved amount: Rs 7,500.
+
+Kaaran (reason): Your shortage claim has been checked against the delivery record and approved.
+
+Yeh decision RouteMax claims team ke review ke adheen hai (subject to review). Koi sawaal ho to is email ka reply karein, reference C09.
+
+Dhanyavaad,
+RouteMax Claims Desk"
+C10,SHP-1010,approve,4000,"R2: id ""SHP-1O10"" normalised to SHP-1010; sender matches Metro Hardware. R3: filed 3 days after delivery (window 7). R4: photos attached (1 image file). R9: approve Rs 4,000.","Dear Metro Hardware,
+
+Thank you for contacting RouteMax about shipment SHP-1010.
+
+Decision: your damage claim has been approved for Rs 4,000.
+
+Reason: Your damage claim has been checked against the delivery record and approved.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C10.
+
+Regards,
+RouteMax Claims Desk"
+C11,SHP-1011,reject,0,R3: filed 1 day after delivery (window 7). R6: POD confirms the full count (12 of 12 pieces received) -> reject.,"Dear Karan,
+
+Thank you for contacting RouteMax about shipment SHP-1011.
+
+Decision: we are unable to approve this shortage claim and it has been rejected.
+
+Reason: The proof of delivery confirms that the full count of 12 pieces was received, so we are unable to accept a shortage claim for this shipment.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C11.
+
+Regards,
+RouteMax Claims Desk"
+C12,SHP-1012,reject,0,R3: filed 8 days after delivery (2026-11-02 -> 2026-11-10); window is 7 days -> reject.,"Dear Nova Textiles,
+
+Thank you for contacting RouteMax about shipment SHP-1012.
+
+Decision: we are unable to approve this damage claim and it has been rejected.
+
+Reason: The claim was filed 8 days after delivery, which is outside our 7-day claims window.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C12.
+
+Regards,
+RouteMax Claims Desk"
+C13,SHP-1013,escalate,58000,"R3: filed 4 days after delivery (key-account window 15 for Zenith Retail). R4: photos attached (2 image files). R8: payable Rs 58,000 exceeds the Rs 50,000 approval limit - Claims Manager approval required (recommended Rs 58,000).","Dear Zenith Retail - Inward team,
+
+Thank you for contacting RouteMax about shipment SHP-1013.
+
+Decision: your damage claim has been forwarded to the Claims Manager for approval. No final decision has been made yet, and we will update you once that is complete.
+
+Reason: Claims of this value need approval from our Claims Manager, so your claim has been forwarded for review.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C13.
+
+Regards,
+RouteMax Claims Desk"
+C14,SHP-1014,approve,6000,"R3: filed 3 days after delivery (window 7). R4: photos attached (2 image files). R9: approve Rs 6,000.","Dear Vikram,
+
+Thank you for contacting RouteMax about shipment SHP-1014.
+
+Decision: your damage claim has been approved for Rs 6,000.
+
+Reason: Your damage claim has been checked against the delivery record and approved.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C14.
+
+Regards,
+RouteMax Claims Desk"
+C14,SHP-1015,need_info,0,R3: filed 2 days after delivery (window 7). R4: customer states there are no photos for this claim -> need_info (photos).,"Dear Vikram,
+
+Thank you for contacting RouteMax about shipment SHP-1015.
+
+Decision: we need more information before we can process this damage claim.
+
+Reason: Damage claims need photos of the damaged goods before we can decide, and we do not have photos for this claim.
+
+Please send us:
+- clear photos of the damaged goods and the packaging
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C14.
+
+Regards,
+RouteMax Claims Desk"
+C15,SHP-1016,not_a_claim,0,R0: email is not a damage or shortage claim -> not_a_claim.,"Dear Sunrise Foods,
+
+Thank you for contacting RouteMax about shipment SHP-1016.
+
+Decision: your message is not being treated as a claim, so no claim has been opened. We have passed your request to the RouteMax customer service team.
+
+Reason: Your message does not appear to be a damage or shortage claim, so no claim has been opened.
+
+This decision is subject to review by the RouteMax claims team. If anything here looks wrong, please reply to this email quoting reference C15.
+
+Regards,
+RouteMax Claims Desk"

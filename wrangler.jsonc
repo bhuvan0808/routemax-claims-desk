@@ -1,0 +1,34 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "routemax-claims-desk",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-10-01",
+
+  // Static UI (public/index.html). Asset requests are served before the Worker runs;
+  // everything else (the API) falls through to src/worker/index.ts.
+  "assets": { "directory": "./public", "binding": "ASSETS" },
+
+  // State: one SQLite-backed Durable Object (works on the Workers free plan).
+  "durable_objects": {
+    "bindings": [{ "name": "CLAIMS_DO", "class_name": "ClaimsStoreDO" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ClaimsStoreDO"] }],
+
+  // Lets the Worker `import shipmentsCsv from "../../data/shipments.csv"` as a string.
+  "rules": [{ "type": "Text", "globs": ["**/*.csv"], "fallthrough": true }],
+
+  // Non-secret config. GROQ_API_KEY is a SECRET and never lives in this file:
+  //   wrangler secret put GROQ_API_KEY
+  // Without the secret the Worker falls back to the offline mock LLM (see /health).
+  // Optional: GROQ_MODEL to override the model in src/config.ts.
+  "vars": {
+    "LLM_MODE": "groq",
+    "LOOKUP_FAIL_MODE": "none",
+    // "1" = demo mode: allows the x-lookup-fail request header and POST /admin/reset.
+    "ALLOW_FAULT_INJECTION": "1",
+    // JSON policy overrides, e.g. {"smallClaimPhotoWaiverInr":5000}. Empty = defaults.
+    "POLICY_OVERRIDES": ""
+  },
+
+  "observability": { "enabled": true }
+}
