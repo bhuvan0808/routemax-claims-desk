@@ -9,7 +9,8 @@ One failure from `eval_runs/`, chosen because it is the one that would pay money
 | `eval_runs/2026-11-19T10-12-43Z-mock` | 104/104 pass | First full run, mock mode. Nothing failed. |
 | `eval_runs/2026-11-19T10-13-08Z-groq` | **0/16 fail** | First full run, live mode. Groq rejected the key in `.env` (HTTP 401), so extraction failed on every email. All 16 rows failed closed: `escalate`, amount 0, rule E1. Nothing was approved. |
 | `eval_runs/2026-11-19T10-16-24Z-mock` | **112/113 fail** | After adding 9 harder cases (D30-D38). **D30 failed: Rs 18,000 approved for a spoofed sender.** |
-| `eval_runs/2026-11-19T10-19-12Z-mock` | 113/113 pass | After the fix. |
+| `eval_runs/2026-11-19T10-19-12Z-mock` | 113/113 pass | After the fix (working tree, before commit). |
+| `eval_runs/2026-11-19T10-20-58Z-mock` | 113/113 pass | Same, on the committed fix `4d9a954` with a clean tree. |
 
 The first full run's only failures were the 16 Groq ones, and they share one cause: a bad
 credential, which is not something code can fix. None of them would pay money; the system did
