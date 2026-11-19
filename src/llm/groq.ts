@@ -172,16 +172,18 @@ export function postProcessExtraction(extraction: Extraction, email: ParsedEmail
     if (raw === "") raw = null;
     if (raw !== null && !text.toLowerCase().includes(raw.toLowerCase())) {
       // The model "fixed" the id (SHP-1O10 -> SHP-1010). Put back exactly what the customer wrote.
-      const key = shipmentKey(raw);
-      const written = [...new Set(mentions.filter((m) => m.key === key).map((m) => m.raw))];
-      if (written.length >= 1) raw = written[0];
+      const fixedKey = shipmentKey(raw);
+      const written = mentions.find((m) => m.key === fixedKey);
+      if (written) raw = written.raw;
     }
+    // The heuristic extractor's view of the same shipment, used only to OR-in the stricter "no photo" flag.
+    const key = raw === null ? null : shipmentKey(raw);
     const twin =
-      raw === null
+      key === null
         ? heuristic.claims.length === 1 && extraction.claims.length === 1
           ? heuristic.claims[0]
           : undefined
-        : heuristic.claims.find((c) => c.shipment_id_raw !== null && shipmentKey(c.shipment_id_raw) === shipmentKey(raw));
+        : heuristic.claims.find((c) => c.shipment_id_raw !== null && shipmentKey(c.shipment_id_raw) === key);
     return {
       ...claim,
       shipment_id_raw: raw,

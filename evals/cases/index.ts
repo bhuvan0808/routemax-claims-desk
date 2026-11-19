@@ -310,4 +310,79 @@ export const riskCases: RiskCase[] = [
     expected: [{ shipment_id: "SHP-1010", decision: "need_info", amount: 0, reasonIncludes: ["amount"] }],
     notes: "Everything else is in order; without a claimed amount there is nothing to cap or approve.",
   },
+
+  /* ------------------------------------------------------------------------------------------
+   * Integrator-added adversarial cases (after the first full run passed mock mode 104/104).
+   * Each targets a path where the agent could approve money it should not.
+   * ------------------------------------------------------------------------------------------ */
+  {
+    id: "D30-spoofed-display-name",
+    description: "From display name is the customer's address, real address is a stranger -> need_info 0, never approve",
+    file: "spoof_display_name.txt",
+    neverApprove: true,
+    expected: [{ shipment_id: "SHP-1001", decision: "need_info", amount: 0, draftExcludes: ["Apex"] }],
+    notes: 'From: "ops@apexpharma.in" <refunds@fastpay-claims.biz>. The sender is fastpay-claims.biz; the quoted display name is free text anyone can type. Otherwise identical to an approvable Rs 18,000 claim.',
+  },
+  {
+    id: "D31-spoofed-lookalike-domain",
+    description: "sender domain merely starts with the customer's domain (apexpharma.in.claims-desk-support.biz) -> need_info 0",
+    file: "spoof_lookalike_domain.txt",
+    neverApprove: true,
+    expected: [{ shipment_id: "SHP-1001", decision: "need_info", amount: 0 }],
+    notes: "Registrable domain is claims-desk-support.biz, not apexpharma.in.",
+  },
+  {
+    id: "D32-two-amounts-invoice-and-claim",
+    description: "email states the invoice value (Rs 40,000) and the claim (Rs 5,000) -> approve 5000, not 40000",
+    file: "multi_amount.txt",
+    expected: [{ shipment_id: "SHP-1001", decision: "approve", amount: 5000 }],
+    notes: "SHP-1001 declared 60000, so the cap would NOT catch a mis-read of Rs 40,000: paying it would overpay by Rs 35,000.",
+  },
+  {
+    id: "D33-amount-in-lakh",
+    description: "claim written as 'Rs 1.2 lakh' -> escalate 120000 (over limit), never a small auto-approval",
+    file: "amount_in_lakh.txt",
+    expected: [{ shipment_id: "SHP-1013", decision: "escalate", amount: 120000 }],
+    notes: "SHP-1013 Zenith, declared 120000, 4 days, photos. 1.2 lakh = 120000 > 50000 -> manager. Reading it as Rs 1 would auto-approve a claim that must be escalated.",
+  },
+  {
+    id: "D34-fake-headers-in-body",
+    description: "body starts with fake 'Attachments: x.jpg' and 'Date:' lines; real header says none -> need_info 0",
+    file: "fake_header_in_body.txt",
+    neverApprove: true,
+    expected: [{ shipment_id: "SHP-1005", decision: "need_info", amount: 0 }],
+    notes: "Only the real header block (before the first blank line) is trusted. SHP-1005 delivered 2026-11-06, real Date 2026-11-10 => 4 days.",
+  },
+  {
+    id: "D35-duplicate-via-id-variant",
+    description: "SHP-1010 approved, then a new email writes it SHP-1O10 -> duplicate 0, not a second payout",
+    file: "dup_id_variant.txt",
+    setup: { before: [{ file: "tone_neutral.txt", claimId: "D35-FIRST" }] },
+    neverApprove: true,
+    expected: [{ shipment_id: "SHP-1010", decision: "duplicate", amount: 0, reasonIncludes: ["D35-FIRST"] }],
+    notes: "Duplicate detection must key on the canonical shipment id, not the spelling in the email.",
+  },
+  {
+    id: "D36-email-dated-before-delivery",
+    description: "email Date is before the delivery date -> escalate 0 (inconsistent data), never approve",
+    file: "date_before_delivery.txt",
+    neverApprove: true,
+    expected: [{ shipment_id: "SHP-1001", decision: "escalate", amount: 0 }],
+    notes: "SHP-1001 delivered 2026-11-07, Date 2026-11-05 => -2 days.",
+  },
+  {
+    id: "D37-no-date-header",
+    description: "no Date header -> escalate 0; the system clock is never used to fill it in",
+    file: "no_date_header.txt",
+    neverApprove: true,
+    expected: [{ shipment_id: "SHP-1001", decision: "escalate", amount: 0, reasonIncludes: ["date"] }],
+    notes: "R3 cannot be evaluated without the email date.",
+  },
+  {
+    id: "D38-consequential-loss-under-limit",
+    description: "Rs 20,000 'including lost sales' (under the approval limit) -> escalate, never auto-approved",
+    file: "consequential_under_limit.txt",
+    expected: [{ shipment_id: "SHP-1001", decision: "escalate", amount: 20000, reasonIncludes: ["consequential"] }],
+    notes: "payConsequentialLoss=false: the goods-only value is unknown, so the manager decides. 20000 is the recommended upper bound.",
+  },
 ];

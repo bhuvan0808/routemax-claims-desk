@@ -249,7 +249,7 @@ export function countHinglishMarkers(text: string): number {
 }
 
 export function detectLanguage(text: string): Language {
-  if ((text.match(/[ऀ-ॿ]/g) ?? []).length >= 5) return "hi";
+  if ((text.match(/[ऀ-ॿ]/g) ?? []).length >= 5) return "hi"; // Devanagari
   return countHinglishMarkers(text) >= 2 ? "hinglish" : "en";
 }
 
