@@ -57,6 +57,8 @@ Other things only Meera knows:
 | State backend | Durable Object with SQLite in the Worker; JSON file store for the CLI; in-memory store for tests and evals. One `ClaimsStore` interface. | Brief. D1 was not needed. |
 | Demo mode on the live Worker | `ALLOW_FAULT_INJECTION=1` is set in `wrangler.jsonc`, enabling the `x-lookup-fail` header and `POST /admin/reset`. The API has no auth. | Needed for the live smoke test. **Turn it off and put the Worker behind Cloudflare Access before real use.** |
 | Mock mode | A regex/heuristic extractor and template replies. Deterministic, no key, no network. It is the default (`LLM_MODE=mock`). | Brief. It reads today's 15 emails correctly; it is a test double, not a replacement for the LLM on messy real email. |
+| Groq key rejected | The `GROQ_API_KEY` placed in `.env` is not accepted by Groq (HTTP 401; it is 32 characters and does not start with `gsk_`). The Worker was deployed **without** the secret, so it runs in mock mode. Live mode is unverified. | Setting a known-bad secret would switch the Worker to live mode and make every claim escalate with E1. Mock mode is the working, honest state until there is a valid key. |
+| Sender identity | Taken only from the angle-bracket address in the From header. Display names are ignored. No address, or two different ones, means "unknown sender" and no approval. | Found by eval case D30: a spoofed display name was approved for Rs 18,000. See [FIX_LOG.md](FIX_LOG.md). |
 | Timestamps | `processed_at` / audit `ts` use the wall clock. They are metadata only; no rule reads them. | R3 uses only the email Date header and the delivery date. |
 
 ## Groq model

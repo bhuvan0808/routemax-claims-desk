@@ -4,8 +4,8 @@ Reads damage and shortage claim emails, decides each claim against the SOP with 
 rules engine, and drafts the customer reply for a human to review. It never sends email and
 never pays anyone.
 
-- **Live URL:** __LIVE_URL__
-- **Repo:** __REPO_URL__
+- **Live URL:** https://routemax-claims-desk.coue-mcp.workers.dev
+- **Repo:** https://github.com/bhuvan0808/routemax-claims-desk (private)
 - **Today's batch:** `npm run claims` -> [results.csv](results.csv) (16 rows from 15 emails)
 
 ## How it works
@@ -209,6 +209,16 @@ node scripts/smoke.mjs https://routemax-claims-desk.<subdomain>.workers.dev
 Or, with tokens in `.env` (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `GROQ_API_KEY`,
 `GITHUB_TOKEN`): `npm run ship` creates the private repo, pushes, deploys, sets the secret and
 runs the smoke test. Without a Groq secret the Worker runs in mock mode and says so in `/health`.
+
+**Current state of the live URL** (checked after deploy on 2026-11-19):
+
+- `scripts/smoke.mjs` passes 11 of 11: `/health`, one email, the same email again (idempotent
+  replay, still 1 row), `x-lookup-fail: error` (escalate, amount 0, "lookup failed"), CSV, UI.
+- Today's 15 emails posted to the live API return the same 16 rows as the golden set, and they
+  are loaded there now.
+- It runs in **mock mode**. `GROQ_API_KEY` was deliberately not set as a Worker secret because
+  Groq rejects the key that was supplied. Once you have a valid key:
+  `npx wrangler secret put GROQ_API_KEY`, then check `/health` shows `llm_mode: "groq"`.
 
 The deployed Worker runs in demo mode (`ALLOW_FAULT_INJECTION=1`, no auth) so the failure
 injection can be shown live. Before real use: set it to `0` and put the Worker behind Cloudflare

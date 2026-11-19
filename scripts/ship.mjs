@@ -26,11 +26,11 @@ const URL_FILE = ".wrangler/live-url.txt";
 const steps = process.argv.slice(2).filter((a) => !a.startsWith("-"));
 const want = (s) => steps.length === 0 || steps.includes(s);
 const env = (k) => (process.env[k] ?? "").trim();
-const isWin = process.platform === "win32";
-const wranglerBin = `node_modules/.bin/wrangler${isWin ? ".cmd" : ""}`;
+// Run wrangler through node directly: no shell, so it behaves the same on Windows, macOS and Linux.
+const wrangler = (args, opts) => run(process.execPath, ["node_modules/wrangler/bin/wrangler.js", ...args], opts);
 
 function run(cmd, args, opts = {}) {
-  const res = spawnSync(cmd, args, { encoding: "utf8", shell: isWin && cmd.endsWith(".cmd"), ...opts });
+  const res = spawnSync(cmd, args, { encoding: "utf8", ...opts });
   return { code: res.status ?? 1, out: `${res.stdout ?? ""}${res.stderr ?? ""}` };
 }
 /** Remove anything that looks like a credential before echoing tool output. */
@@ -102,7 +102,7 @@ if (want("deploy")) {
   if (!cfReady) {
     skipped.push("deploy: CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID empty in .env");
   } else {
-    const dep = run(wranglerBin, ["deploy"]);
+    const dep = wrangler(["deploy"]);
     console.log(redact(dep.out.trim()));
     const m = /https:\/\/[a-z0-9.-]+\.workers\.dev/i.exec(dep.out);
     if (dep.code === 0 && m) {
@@ -119,7 +119,7 @@ if (want("secret")) {
   if (!cfReady) skipped.push("secret: Cloudflare credentials missing");
   else if (!env("GROQ_API_KEY")) skipped.push("secret: GROQ_API_KEY empty in .env (Worker will run in mock mode)");
   else {
-    const sec = run(wranglerBin, ["secret", "put", "GROQ_API_KEY"], { input: env("GROQ_API_KEY") + "\n" });
+    const sec = wrangler(["secret", "put", "GROQ_API_KEY"], { input: env("GROQ_API_KEY") + "\n" });
     console.log(redact(sec.out.trim()));
     if (sec.code === 0) done.push("secret GROQ_API_KEY set on the Worker");
     else skipped.push("secret: wrangler secret put failed");

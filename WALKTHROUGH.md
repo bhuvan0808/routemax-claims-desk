@@ -91,6 +91,6 @@ Two things I could not verify, as opposed to things for you to decide:
 
 ## Where things are
 
-- Review page and API: __LIVE_URL__
-- Code: __REPO_URL__
+- Review page and API: https://routemax-claims-desk.coue-mcp.workers.dev
+- Code: https://github.com/bhuvan0808/routemax-claims-desk (private)
 - How to run, config switches, failure injection: [README.md](README.md)
